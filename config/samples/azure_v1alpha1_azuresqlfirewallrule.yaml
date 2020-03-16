@@ -4,7 +4,7 @@ metadata:
   name: sqlf-allowazuresvcaccess
 spec:
   resourcegroup: resourcegroup-azure-operators
-  server:  sqlserver-sample-777
+  server:  sqlserver-sample-888
   
   # this IP range enables Azure Service access
   startipaddress: 0.0.0.0

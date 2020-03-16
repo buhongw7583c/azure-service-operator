@@ -1,18 +1,18 @@
 apiVersion: azure.microsoft.com/v1alpha1
 kind: AzureSqlFailoverGroup
 metadata:
-  name: azuresqlfailovergroup-sample
+  name: azuresqlfailovergroup-sample1
 spec:
-  location: eastus
+  location: southeastasia
   resourcegroup: resourcegroup-azure-operators
-  server: sqlserver-samplepri
+  server: sqlserver-sample-888
   failoverpolicy: automatic
   failovergraceperiod: 30
-  secondaryserver: sqlserver-samplesec
-  secondaryserverresourcegroup: resourcegroup-azure-operators
+  secondaryserver: sqlserver-sample-999
+  secondaryserverresourcegroup: resourcegroup-azure-operators1
   databaselist:
     - "azuresqldatabase-sample"
-    - "azuresqldatabase-sample2"
+    - "azuresqldatabase-sample888"
   # Use the field below to optionally specify a different keyvault 
   # to store the listener endpoint secrets in
   #keyVaultToStoreSecrets: asoSecretKeyVault

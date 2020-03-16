@@ -1,9 +1,9 @@
 apiVersion: azure.microsoft.com/v1alpha1
 kind: AppInsights
 metadata:
-  name: appinsights-sample
+  name: appinsights-sample1
 spec:
   kind: other # Values should typically be one of the following: web, ios, other, store, java, phone.
-  location: westus
+  location: chinaeast2
   resourceGroup: resourcegroup-azure-operators
   applicationType: other # Possible values include 'web' or 'other'

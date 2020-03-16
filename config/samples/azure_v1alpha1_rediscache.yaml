@@ -1,10 +1,10 @@
 apiVersion: azure.microsoft.com/v1alpha1
 kind: RedisCache
 metadata:
-  name: rediscache-sample1908xyzkj
+  name: rediscache-sample2
 spec:
   location: westus
-  resourceGroup: resourcegroup-azure-operators
+  resourceGroup: resourcegroup-azure-operators1
   properties:
     # possible values for sku.Name are "Basic", "Premium" or "Standard"
     # possible values for sku.family are "C" and "P". 

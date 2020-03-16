@@ -1,9 +1,9 @@
 apiVersion: azure.microsoft.com/v1alpha1
 kind: AzureSqlDatabase
 metadata:
-  name:  azuresqldatabase-sample
+  name:  azuresqldatabase-sample888
 spec:
-  location: westus
+  location: southeastasia
   resourcegroup: resourcegroup-azure-operators
-  server:  sqlserver-sample-777
+  server:  sqlserver-sample-888
   edition: 0

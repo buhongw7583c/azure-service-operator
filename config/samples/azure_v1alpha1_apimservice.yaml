@@ -10,10 +10,10 @@ spec:
   #   premium - a premium instance, if you are using a VNet then your instance must be premium
   tier: premium 
 
-  location: westus
+  location: chinaeast2
   resourceGroup: resourcegroup-azure-operators
-  publisherName: {Your name}
-  publisherEmail: {Your email}
+  publisherName: azure-cli-2020-02-28-08-42-27
+  publisherEmail: hobu@cse.partner.onmschina.cn
 
   # vnetType can be:
   #   none - do not attach to a VNet, if your instance is not premium then you must use this value, the other VNet values do not matter then
@@ -25,5 +25,6 @@ spec:
   vnetSubnetName: test1
 
   # app insight values are optional, if you do not want to use app insights then you can leave blank
-  appInsightsResourceGroup: resourcegroup-azure-operators-wmm
-  appInsightsName: appinsights-sample-wmm
+  #appInsightsResourceGroup: resourcegroup-azure-operators
+  #appInsightsName: appinsights-sample
+
