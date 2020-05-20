@@ -11,6 +11,7 @@ import (
 	psql "github.com/Azure/azure-sdk-for-go/services/postgresql/mgmt/2017-12-01/postgresql"
 	"github.com/Azure/azure-service-operator/api/v1alpha1"
 	azurev1alpha1 "github.com/Azure/azure-service-operator/api/v1alpha1"
+	"github.com/Azure/azure-service-operator/api/v1alpha2"
 	"github.com/Azure/azure-service-operator/pkg/errhelp"
 	"github.com/Azure/azure-service-operator/pkg/helpers"
 	"github.com/Azure/azure-service-operator/pkg/resourcemanager"
@@ -133,17 +134,12 @@ func (p *PSQLServerClient) Ensure(ctx context.Context, obj runtime.Object, opts 
 	instance.Status.FailedProvisioning = false
 	pollURL, _, err := p.CreateServerIfValid(
 		ctx,
-		instance.Name,
-		instance.Spec.ResourceGroup,
-		instance.Spec.Location,
+		*instance,
 		labels,
-		psql.ServerVersion(instance.Spec.ServerVersion),
-		psql.SslEnforcementEnum(instance.Spec.SSLEnforcement),
 		skuInfo,
 		adminlogin,
 		adminpassword,
 		createmode,
-		instance.Spec.ReplicaProperties.SourceServerId,
 	)
 	if err != nil {
 		instance.Status.Message = errhelp.StripErrorIDs(err)
@@ -207,9 +203,22 @@ func (p *PSQLServerClient) Delete(ctx context.Context, obj runtime.Object, opts 
 
 	status, err := p.DeleteServer(ctx, instance.Spec.ResourceGroup, instance.Name)
 	if err != nil {
-		if !errhelp.IsAsynchronousOperationNotComplete(err) {
-			return true, err
+		catch := []string{
+			errhelp.AsyncOpIncompleteError,
 		}
+		gone := []string{
+			errhelp.ResourceGroupNotFoundErrorCode,
+			errhelp.ParentNotFoundErrorCode,
+			errhelp.NotFoundErrorCode,
+			errhelp.ResourceNotFound,
+		}
+		azerr := errhelp.NewAzureErrorAzureError(err)
+		if helpers.ContainsString(catch, azerr.Type) {
+			return true, nil
+		} else if helpers.ContainsString(gone, azerr.Type) {
+			return false, nil
+		}
+		return true, err
 	}
 	instance.Status.State = status
 
@@ -250,11 +259,12 @@ func (p *PSQLServerClient) GetStatus(obj runtime.Object) (*v1alpha1.ASOStatus, e
 	if err != nil {
 		return nil, err
 	}
-	return &instance.Status, nil
+	st := v1alpha1.ASOStatus(instance.Status)
+	return &st, nil
 }
 
-func (p *PSQLServerClient) convert(obj runtime.Object) (*v1alpha1.PostgreSQLServer, error) {
-	local, ok := obj.(*v1alpha1.PostgreSQLServer)
+func (p *PSQLServerClient) convert(obj runtime.Object) (*v1alpha2.PostgreSQLServer, error) {
+	local, ok := obj.(*v1alpha2.PostgreSQLServer)
 	if !ok {
 		return nil, fmt.Errorf("failed type assertion on kind: %s", obj.GetObjectKind().GroupVersionKind().String())
 	}
